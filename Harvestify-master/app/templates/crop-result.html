@@ -1,0 +1,136 @@
+{% extends 'layout.html' %} {% block body %}
+
+<style>
+  html body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 3rem 0;
+  }
+
+  .result-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .result-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.8s ease;
+  }
+
+  .result-header .icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    animation: bounce 2s infinite;
+  }
+
+  .result-card {
+    background: white;
+    border-radius: 20px;
+    padding: 4rem 3rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: fadeInUp 0.8s ease;
+    text-align: center;
+  }
+
+  .result-card h1 {
+    color: #333;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .crop-name {
+    color: #667eea;
+    font-size: 3rem;
+    font-weight: 700;
+    text-transform: capitalize;
+    display: block;
+    margin: 1.5rem 0;
+    text-shadow: 2px 2px 4px rgba(102, 126, 234, 0.2);
+  }
+
+  .success-icon {
+    font-size: 4rem;
+    color: #38ef7d;
+    margin-bottom: 1rem;
+  }
+
+  .btn-back {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 2rem;
+  }
+
+  .btn-back:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    color: white;
+    text-decoration: none;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+</style>
+
+<div class="result-container">
+  <div class="result-header">
+    <div class="icon">🌾</div>
+  </div>
+
+  <div class="result-card">
+    <div class="success-icon">✅</div>
+    
+    <h1>Recommended Crop for Your Farm</h1>
+    
+    <span class="crop-name">{{ prediction }}</span>
+    
+    <p style="color: #666; font-size: 1.1rem; margin-top: 1rem;">
+      Based on your soil nutrients and climate conditions, <strong>{{ prediction }}</strong> is the optimal crop choice for maximum yield.
+    </p>
+
+    <a href="{{ url_for('crop_recommend') }}" class="btn-back">
+      ← Try Another Analysis
+    </a>
+  </div>
+</div>
+{% endblock %}

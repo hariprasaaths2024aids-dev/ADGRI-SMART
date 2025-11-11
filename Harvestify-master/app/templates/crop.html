@@ -1,0 +1,276 @@
+{% extends 'layout.html' %} {% block body %}
+
+<style>
+  html body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 2rem 0 4rem 0;
+  }
+
+  .crop-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-bottom: 4rem;
+  }
+
+  .crop-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.8s ease;
+  }
+
+  .crop-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin-bottom: 0.5rem;
+  }
+
+  .crop-header p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+  }
+
+  .form-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    padding-bottom: 3rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: fadeInUp 0.8s ease;
+    margin-bottom: 3rem;
+  }
+
+  .form-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section h5 {
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #667eea;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .form-group label i {
+    margin-right: 0.5rem;
+    color: #667eea;
+  }
+
+  .form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+
+  .input-group-text {
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px 0 0 10px;
+  }
+
+  .btn-predict {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .btn-predict:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<div class="crop-container">
+  <div class="crop-header">
+    <h1>🌾 Crop Recommendation</h1>
+    <p>Get AI-powered crop suggestions for your farm</p>
+  </div>
+
+  <div class="form-card">
+    <form method="POST" action="{{ url_for('crop_prediction') }}">
+      
+      <div class="form-section">
+        <h5>💧 Soil Nutrients</h5>
+        
+        <div class="form-group">
+          <label><i class="fa fa-flask"></i>Nitrogen (N)</label>
+          <input
+            type="number"
+            class="form-control"
+            name="nitrogen"
+            placeholder="e.g., 50"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-flask"></i>Phosphorous (P)</label>
+          <input
+            type="number"
+            class="form-control"
+            name="phosphorous"
+            placeholder="e.g., 50"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-flask"></i>Potassium (K)</label>
+          <input
+            type="number"
+            class="form-control"
+            name="pottasium"
+            placeholder="e.g., 50"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-tint"></i>pH Level</label>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            name="ph"
+            placeholder="e.g., 6.5"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h5>🌤️ Climate Conditions</h5>
+        
+        <div class="form-group">
+          <label><i class="fa fa-cloud-rain"></i>Rainfall (mm)</label>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            name="rainfall"
+            placeholder="e.g., 200"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-thermometer-half"></i>Temperature (°C)</label>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            name="temperature"
+            placeholder="e.g., 25"
+            value="25"
+          />
+          <small class="text-muted">Optional: Auto-filled from city data</small>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-water"></i>Humidity (%)</label>
+          <input
+            type="number"
+            step="0.01"
+            class="form-control"
+            name="humidity"
+            placeholder="e.g., 70"
+            value="70"
+          />
+          <small class="text-muted">Optional: Auto-filled from city data</small>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h5>📍 Location</h5>
+        
+        <div class="form-group">
+          <label><i class="fa fa-map-marker"></i>State</label>
+          <select
+            onchange="print_city('state', this.selectedIndex);"
+            id="sts"
+            name="stt"
+            class="form-control"
+            required
+          ></select>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa fa-map-pin"></i>City</label>
+          <select
+            id="state"
+            class="form-control"
+            name="city"
+            required
+          ></select>
+          <script language="javascript">
+            print_state("sts");
+          </script>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-predict">
+        🔮 Get Recommendation
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+<!-- Form section -->
+
+{% endblock %}
